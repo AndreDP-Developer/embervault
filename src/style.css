@@ -1,0 +1,844 @@
+@font-face {
+  font-family: DM;
+  src: url("/fonts/font-0.ttf");
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+body {
+  background: #10171a;
+  color: #d5cec0;
+  font:
+    13px DM,
+    Arial,
+    sans-serif;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: linear-gradient(#2b2b29, #151b1c);
+  border: 1px solid #665943;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 9px 13px;
+}
+button:hover {
+  border-color: #c2a671;
+  background: #444036;
+}
+button:focus-visible {
+  outline: 2px solid #edd1a1;
+  outline-offset: 3px;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+kbd {
+  font: 9px DM;
+  color: #b09a75;
+}
+h1,
+h2,
+p {
+  margin: 0;
+}
+#app {
+  height: 100dvh;
+  position: relative;
+  isolation: isolate;
+}
+#scene {
+  position: absolute;
+  inset: 0;
+}
+#scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 48%, transparent 25%, #09101480 85%),
+    linear-gradient(#09101380, transparent 22%, transparent 70%, #070c0dcc);
+}
+header {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  top: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 15px Georgia;
+  letter-spacing: 2.1px;
+  color: #ceb68a;
+  text-shadow: 0 2px 6px #000;
+}
+.brand small {
+  display: block;
+  font: 8px DM;
+  letter-spacing: 3px;
+  color: #829189;
+  margin-top: 7px;
+}
+.emblem {
+  font-size: 38px;
+}
+nav {
+  display: flex;
+  gap: 7px;
+  pointer-events: auto;
+}
+nav button {
+  background: #111a1ddd;
+  border-color: #4c4b3d;
+  font-size: 11px;
+}
+nav kbd {
+  margin-left: 8px;
+}
+.eyebrow {
+  font-size: 8px;
+  letter-spacing: 2.4px;
+  color: #bfa576;
+}
+.location {
+  position: absolute;
+  top: 112px;
+  left: 32px;
+  max-width: 300px;
+  pointer-events: none;
+  text-shadow: 0 2px 7px #000;
+}
+.location h1 {
+  font: 28px Georgia;
+  color: #ede0c4;
+  margin: 9px 0 10px;
+}
+.location p {
+  font-size: 11px;
+  line-height: 1.75;
+  color: #b0b6a7;
+  max-width: 280px;
+}
+.map-panel {
+  position: absolute;
+  right: 28px;
+  top: 88px;
+  width: 196px;
+  background: linear-gradient(135deg, #111919e8, #0a1112aa);
+  border: 1px solid #5c554035;
+  padding: 11px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+.map-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: #b49e76;
+}
+#map {
+  width: 100%;
+  height: 134px;
+  display: block;
+  opacity: 0.9;
+}
+.map-resources {
+  display: flex;
+  justify-content: space-between;
+  color: #b0a282;
+  font-size: 9px;
+  border-top: 1px solid #554c333d;
+  padding-top: 8px;
+}
+.quest {
+  position: absolute;
+  top: 273px;
+  right: 30px;
+  width: 191px;
+  display: flex;
+  gap: 10px;
+  pointer-events: none;
+}
+.quest-diamond {
+  font-size: 27px;
+  color: #c2a465;
+}
+.quest small {
+  font-size: 8px;
+  color: #c2a465;
+  letter-spacing: 1.4px;
+}
+.quest p {
+  font-size: 10px;
+  line-height: 1.65;
+  color: #a5aea0;
+  margin-top: 5px;
+}
+.hud {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  filter: drop-shadow(0 8px 18px #0009);
+  max-width: 100%;
+  padding: 0 15px;
+}
+.orb-wrap {
+  text-align: center;
+  padding-bottom: 17px;
+}
+.orb-wrap > small {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #c9b893;
+  display: block;
+  margin-top: 10px;
+}
+.orb {
+  position: relative;
+  border-radius: 50%;
+  height: 105px;
+  width: 105px;
+  border: 6px solid #534b3b;
+  outline: 1px solid #857358;
+  overflow: hidden;
+  background: #171b1d;
+  box-shadow:
+    0 0 0 4px #131a1b,
+    0 0 0 5px #514734,
+    inset 0 0 20px #000;
+}
+.orb:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 17px 4px #0008;
+  pointer-events: none;
+}
+.orb-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  transition: height 0.25s;
+  background: radial-gradient(
+    ellipse at 30% 30%,
+    #d65743,
+    #7c211e 60%,
+    #3d171a
+  );
+}
+.relic-orb {
+  background: radial-gradient(ellipse at 30% 30%, #443b2c, #171b1d 70%);
+}
+.relic-orb strong {
+  font-size: 40px;
+  color: #8a7858;
+}
+.relic-orb.found {
+  background: radial-gradient(
+    ellipse at 30% 30%,
+    #dfbe6d,
+    #946124 65%,
+    #3d321b
+  );
+}
+.relic-orb.found strong {
+  color: #fff0c7;
+}
+.orb-gloss {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 22%, #ffe8c33b, transparent 45%);
+}
+.orb strong {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff1d6;
+  font: 17px Georgia;
+  text-shadow: 0 2px 4px #000;
+}
+.belt {
+  width: 406px;
+  flex-shrink: 0;
+}
+.belt-heading {
+  display: flex;
+  justify-content: space-between;
+  font-size: 7px;
+  color: #ad9b7b;
+  letter-spacing: 1.5px;
+  margin: 0 2px 9px;
+}
+.belt-heading span:last-child {
+  letter-spacing: 0.3px;
+  color: #91a292;
+}
+.action-bar {
+  display: flex;
+  gap: 5px;
+  padding: 6px;
+  border: 1px solid #716044;
+  background: linear-gradient(#3e3a30, #171e1d);
+  box-shadow: inset 0 0 0 3px #141b1d;
+  border-radius: 5px;
+}
+.action-bar button {
+  position: relative;
+  width: 74px;
+  height: 76px;
+  padding: 7px 4px 6px;
+  background: radial-gradient(ellipse at 50% 20%, #434237, #1d2524);
+  border-color: #77664a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: 9px;
+  color: #d6c5a2;
+}
+.action-bar button:hover {
+  background: #66563b;
+}
+.action-bar kbd {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  color: #bcaf8d;
+  font-size: 8px;
+}
+.action-icon {
+  font: 30px/1 Georgia;
+  color: #d9c297;
+  filter: drop-shadow(0 2px 3px #000);
+}
+.salve-icon {
+  color: #baca9a;
+}
+.action-bar b {
+  background: #101a17;
+  padding: 1px 5px;
+  border-radius: 6px;
+  color: #d2d9bd;
+}
+.belt-footer {
+  text-align: center;
+  font-size: 8px;
+  color: #798b7d;
+  margin-top: 9px;
+  letter-spacing: 0.3px;
+}
+.notification {
+  position: absolute;
+  bottom: 178px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #dbcfb1;
+  text-shadow: 0 2px 4px #000;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #0b1414d9 20%,
+    #0b1414d9 80%,
+    transparent
+  );
+  padding: 9px 35px;
+  max-width: 80%;
+  text-align: center;
+  pointer-events: none;
+}
+.hover-label {
+  position: absolute;
+  bottom: 214px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ecd9b0;
+  text-shadow: 0 2px 5px #000;
+  font-size: 12px;
+  pointer-events: none;
+}
+.camera-tools {
+  position: absolute;
+  bottom: 28px;
+  right: 25px;
+  display: flex;
+  gap: 5px;
+}
+.camera-tools button {
+  padding: 5px 10px;
+  background: #101b1ccc;
+  color: #a8b6a4;
+}
+.enemy-target {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 190px;
+  text-align: center;
+  font: 13px Georgia;
+  color: #e3c9a6;
+  text-shadow: 0 2px 4px #000;
+  pointer-events: none;
+}
+.enemy-target > div {
+  height: 5px;
+  background: #181312;
+  margin-top: 8px;
+  border: 1px solid #5e4a3c;
+}
+.enemy-target i {
+  display: block;
+  height: 100%;
+  background: #a94335;
+  transition: width 0.2s;
+}
+.floating {
+  position: absolute;
+  pointer-events: none;
+  font: bold 24px Georgia;
+  color: #f2dcad;
+  text-shadow: 0 2px 4px #000;
+  transform: translate(-50%, -50%);
+}
+.floating.hurt {
+  color: #f0816f;
+}
+.floating.heal {
+  color: #b2dca1;
+}
+.hidden {
+  display: none !important;
+}
+.journal {
+  position: absolute;
+  right: 25px;
+  top: 85px;
+  bottom: 185px;
+  width: 310px;
+  z-index: 8;
+  background: #121b1aee;
+  border: 1px solid #73634a;
+  padding: 23px;
+  box-shadow: 0 15px 60px #000a;
+  backdrop-filter: blur(12px);
+  overflow: auto;
+}
+.journal-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 13px;
+}
+.journal h2 {
+  font: 25px Georgia;
+  color: #e0cda9;
+}
+.journal-heading button {
+  font-size: 20px;
+  padding: 0 8px;
+}
+#log {
+  padding-left: 15px;
+  font-size: 11px;
+  color: #a9b5a5;
+  line-height: 1.8;
+}
+#log li {
+  margin: 12px 0;
+}
+.pause-screen,
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #071013bc;
+  backdrop-filter: blur(5px);
+}
+.pause-screen h2 {
+  font: 36px Georgia;
+  color: #e6d6b6;
+  margin-bottom: 25px;
+}
+.overlay {
+  align-items: flex-start;
+  background: linear-gradient(90deg, #080f12f2, #091214b0 55%, #0b17152b);
+  padding: 8vw;
+  backdrop-filter: blur(1.5px);
+}
+.welcome {
+  max-width: 550px;
+}
+.welcome h2 {
+  font: 58px/1.04 Georgia;
+  color: #ecdfc2;
+  letter-spacing: -1.3px;
+  margin: 22px 0;
+}
+.welcome p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: #a7b2a4;
+}
+.intro-controls {
+  display: flex;
+  gap: 26px;
+  margin: 32px 0;
+}
+.intro-controls span {
+  font-size: 10px;
+  color: #8e9e8f;
+  line-height: 1.8;
+}
+.intro-controls b {
+  display: block;
+  color: #d0bb95;
+  font-weight: 400;
+}
+.primary {
+  background: linear-gradient(#c3a471, #a7854f);
+  border-color: #dbc190;
+  color: #17211e;
+  padding: 15px 24px;
+  min-width: 220px;
+  text-align: left;
+}
+.primary:hover {
+  background: #d6bc88;
+}
+.primary span {
+  float: right;
+}
+.welcome > small {
+  display: block;
+  font-size: 9px;
+  line-height: 1.7;
+  color: #7e9185;
+  margin-top: 22px;
+  max-width: 350px;
+}
+dialog {
+  background: #17221f;
+  color: #b3c0b0;
+  border: 1px solid #786649;
+  border-radius: 5px;
+  max-width: 480px;
+  padding: 32px;
+  box-shadow: 0 30px 100px #000;
+}
+dialog::backdrop {
+  background: #071012b8;
+  backdrop-filter: blur(5px);
+}
+dialog h2 {
+  font: 30px Georgia;
+  color: #e8dbbe;
+  margin: 18px 0;
+}
+dialog p {
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 16px 0;
+}
+dialog b {
+  color: #ded0b3;
+  font-weight: 400;
+}
+.close {
+  float: right;
+  padding: 0 8px;
+  font-size: 22px;
+}
+.error {
+  position: absolute;
+  inset: 35%;
+  color: #e5c397;
+}
+@media (max-width: 850px) {
+  .brand {
+    font-size: 12px;
+  }
+  .enemy-target {
+    top: 84px;
+    width: 150px;
+  }
+  .location {
+    top: 100px;
+    max-width: 210px;
+  }
+  .location h1 {
+    font-size: 25px;
+  }
+  .location p {
+    font-size: 10px;
+  }
+  .map-panel {
+    width: 150px;
+    top: 83px;
+    padding: 8px;
+  }
+  #map {
+    height: 105px;
+  }
+  .quest {
+    top: 235px;
+    width: 145px;
+  }
+  .hud {
+    gap: 12px;
+    bottom: 15px;
+  }
+  .orb {
+    width: 78px;
+    height: 78px;
+    border-width: 5px;
+  }
+  .orb strong {
+    font-size: 14px;
+  }
+  .belt {
+    width: 330px;
+  }
+  .action-bar button {
+    width: 58px;
+    height: 68px;
+  }
+  .action-icon {
+    font-size: 26px;
+  }
+  .belt-footer {
+    font-size: 7px;
+  }
+  .notification {
+    bottom: 154px;
+    font-size: 10px;
+  }
+  .hover-label {
+    bottom: 192px;
+  }
+  .camera-tools {
+    bottom: 165px;
+    right: 16px;
+  }
+  .welcome h2 {
+    font-size: 47px;
+  }
+}
+@media (max-width: 550px) {
+  header {
+    left: 15px;
+    right: 15px;
+    top: 13px;
+  }
+  .brand {
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    gap: 7px;
+  }
+  .emblem {
+    font-size: 28px;
+  }
+  .brand small {
+    font-size: 6px;
+    letter-spacing: 2px;
+  }
+  nav {
+    gap: 4px;
+  }
+  nav button {
+    font-size: 9px;
+    padding: 7px 9px;
+  }
+  nav kbd {
+    display: none;
+  }
+  .location {
+    left: 17px;
+    top: 85px;
+    max-width: 190px;
+  }
+  .location h1 {
+    font-size: 22px;
+    margin: 7px 0;
+  }
+  .location p {
+    font-size: 9px;
+    max-width: 170px;
+  }
+  .map-panel {
+    right: 13px;
+    width: 121px;
+    top: 73px;
+  }
+  #map {
+    height: 92px;
+  }
+  .map-title {
+    font-size: 6px;
+  }
+  .map-title span:first-child {
+    display: none;
+  }
+  .map-resources {
+    font-size: 7px;
+    gap: 5px;
+  }
+  .quest {
+    top: 207px;
+    right: 15px;
+    width: 116px;
+  }
+  .quest small {
+    font-size: 7px;
+  }
+  .quest p {
+    font-size: 9px;
+  }
+  .hud {
+    gap: 7px;
+    padding: 0 9px;
+    width: 100%;
+    justify-content: center;
+    bottom: 12px;
+    align-items: center;
+  }
+  .orb-wrap {
+    padding: 7px 0 0;
+  }
+  .orb {
+    height: 49px;
+    width: 49px;
+    border-width: 3px;
+    outline: none;
+  }
+  .orb strong {
+    font-size: 10px;
+  }
+  .orb-wrap > small {
+    font-size: 6px;
+    letter-spacing: 1px;
+    margin-top: 7px;
+  }
+  .belt {
+    width: min(280px, calc(100vw - 133px));
+  }
+  .belt-heading {
+    font-size: 6px;
+    letter-spacing: 1px;
+  }
+  .belt-heading span:last-child {
+    display: none;
+  }
+  .action-bar {
+    padding: 4px;
+    gap: 3px;
+    justify-content: space-around;
+  }
+  .action-bar button {
+    width: 19%;
+    height: 56px;
+    font-size: 7px;
+    padding: 4px 0;
+    gap: 3px;
+  }
+  .action-bar kbd {
+    font-size: 6px;
+    top: 3px;
+    left: 3px;
+  }
+  .action-icon {
+    font-size: 23px;
+  }
+  .action-bar b {
+    padding: 0 3px;
+  }
+  .belt-footer {
+    font-size: 6px;
+    line-height: 1.5;
+    margin-top: 7px;
+  }
+  .notification {
+    bottom: 127px;
+    max-width: 95%;
+    width: 95%;
+    font-size: 10px;
+    padding: 8px 15px;
+  }
+  .hover-label {
+    bottom: 161px;
+    font-size: 10px;
+  }
+  .camera-tools {
+    bottom: 192px;
+    right: 14px;
+  }
+  .enemy-target {
+    top: auto;
+    bottom: 187px;
+    width: 140px;
+  }
+  .overlay {
+    padding: 25px;
+  }
+  .welcome h2 {
+    font-size: 43px;
+  }
+  .welcome p {
+    font-size: 12px;
+  }
+  .intro-controls {
+    gap: 17px;
+    margin: 25px 0;
+  }
+  .intro-controls span {
+    font-size: 9px;
+  }
+  .journal {
+    left: 15px;
+    right: 15px;
+    top: 70px;
+    width: auto;
+    bottom: 145px;
+  }
+  .quest-diamond {
+    font-size: 20px;
+  }
+}
+
+.action-bar button {
+  flex: 1;
+}

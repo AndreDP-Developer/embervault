@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#141616" />
+    <title>Embervault · The First Descent</title>
+  </head>
+  <body>
+    <main id="app">
+      <div
+        id="scene"
+        aria-label="Dungeon: click the ground to move, enemies to attack, objects to interact"
+      ></div>
+      <div class="vignette"></div>
+      <header>
+        <div class="brand">
+          <span class="emblem">𓆣</span
+          ><span>EMBERVAULT<small>THE FIRST DESCENT</small></span>
+        </div>
+        <nav>
+          <button id="journal-toggle" title="Journal (J)">
+            Journal <kbd>J</kbd></button
+          ><button id="help" aria-label="Help">?</button
+          ><button id="pause" title="Pause (Escape)">Ⅱ</button>
+        </nav>
+      </header>
+      <section class="location">
+        <span class="eyebrow">THE SUNKEN SANCTUM</span>
+        <h1 id="room-title">The Threshold</h1>
+        <p id="room-desc"></p>
+      </section>
+      <section class="map-panel">
+        <div class="map-title">
+          <span>THE FIRST DESCENT</span><span id="explored"></span>
+        </div>
+        <canvas
+          id="map"
+          width="220"
+          height="170"
+          aria-label="Discovered dungeon map"
+        ></canvas>
+        <div class="map-resources">
+          <span>◈ <b id="gold">0</b> silver</span
+          ><span id="relic">Relic missing</span>
+        </div>
+      </section>
+      <div id="enemy-target" class="enemy-target hidden">
+        <span id="enemy-name"></span>
+        <div><i id="enemy-hp"></i></div>
+      </div>
+      <section class="quest">
+        <span class="quest-diamond">◇</span>
+        <div>
+          <small>THE EMBERHEART</small>
+          <p id="objective">Recover the Emberheart. Return alive.</p>
+        </div>
+      </section>
+      <div id="notification" class="notification" aria-live="polite">
+        Click the floor to walk. Click an enemy to fight.
+      </div>
+      <div id="hover-label" class="hover-label"></div>
+      <div class="camera-tools">
+        <button id="zoom-out" aria-label="Zoom out">−</button
+        ><button id="zoom-in" aria-label="Zoom in">+</button>
+      </div>
+      <section class="hud" aria-label="Adventurer controls">
+        <div class="orb-wrap">
+          <div class="orb vitality">
+            <div id="hp-fill" class="orb-fill"></div>
+            <div class="orb-gloss"></div>
+            <strong id="hp-text">20 / 20</strong>
+          </div>
+          <small>VITALITY</small>
+        </div>
+        <div class="belt">
+          <div class="belt-heading">
+            <span>THE WANDERER</span
+            ><span id="scene-hint">Click to move · Click to fight</span>
+          </div>
+          <div class="action-bar">
+            <button
+              data-action="attack"
+              title="Strike an adjacent enemy (F). Click an enemy to approach and keep attacking."
+            >
+              <kbd>F</kbd><span class="action-icon">⚔</span><span>Attack</span>
+            </button>
+            <button
+              data-action="search"
+              title="Search nearby walls and disarm traps (E)"
+            >
+              <kbd>E</kbd><span class="action-icon">⌕</span><span>Search</span>
+            </button>
+            <button
+              data-action="potion"
+              title="Heal 8 vitality with a salve (1 or H)"
+            >
+              <kbd>1</kbd><span class="action-icon salve-icon">⚱</span
+              ><span>Heal <b id="potions">3</b></span>
+            </button>
+            <button
+              data-action="interact"
+              title="Take nearby loot or leave from the entrance (Space)"
+            >
+              <kbd>Space</kbd><span class="action-icon">♢</span
+              ><span>Interact</span>
+            </button>
+          </div>
+          <div class="belt-footer">
+            Click to move / fight · Hold WASD to walk
+          </div>
+        </div>
+        <div class="orb-wrap">
+          <div class="orb relic-orb">
+            <div class="orb-gloss"></div>
+            <strong id="relic-orb">◇</strong>
+          </div>
+          <small>EMBERHEART</small>
+        </div>
+      </section>
+      <div id="journal" class="journal hidden">
+        <div class="journal-heading">
+          <h2>Field journal</h2>
+          <button id="close-journal" aria-label="Close journal">×</button>
+        </div>
+        <span id="turn" class="eyebrow"></span>
+        <ol id="log"></ol>
+        <button id="restart">New expedition</button>
+      </div>
+      <div id="paused" class="pause-screen hidden">
+        <h2>Expedition paused</h2>
+        <button id="resume" class="primary">Resume</button>
+      </div>
+      <div id="overlay" class="overlay">
+        <div class="welcome">
+          <span class="eyebrow">EMBERVAULT</span>
+          <h2>Into the<br />forgotten depths.</h2>
+          <p>
+            The vault has opened. Its guardians have awakened.<br />Recover the
+            Emberheart and bring it back to daylight.
+          </p>
+          <div class="intro-controls">
+            <span><b>Click the ground</b>Walk there</span
+            ><span><b>Click an enemy</b>Approach & attack</span
+            ><span><b>Click an object</b>Explore & collect</span>
+          </div>
+          <button id="begin" class="primary">
+            Enter the vault <span>↗</span></button
+          ><small
+            >An original dungeon adventure · First playable chapter.</small
+          >
+        </div>
+      </div>
+    </main>
+    <dialog id="help-dialog">
+      <button id="close-help" class="close" aria-label="Close help">×</button
+      ><span class="eyebrow">YOUR FIRST EXPEDITION</span>
+      <h2>Follow your curiosity.<br />Keep a way back.</h2>
+      <p>
+        <b>Click the ground</b> to walk there. A dotted trail shows your route.
+        You stop if a nearby enemy threatens you.
+      </p>
+      <p>
+        <b>Click an enemy</b> to approach and attack it repeatedly. Click
+        elsewhere or use an action to cancel. Movement and attacks are
+        unrestricted. Press 1 to heal.
+      </p>
+      <p>
+        <b>Click chests, the relic or suspicious stonework</b> to approach and
+        interact. E searches nearby walls and disarms traps. Bring the
+        Emberheart to the golden entrance circle and click it to leave.
+      </p>
+      <p>
+        Hold WASD or arrows to walk. Mouse wheel zooms. J opens the journal.
+        Escape pauses. Enemies act when you do; idle time is safe.
+      </p>
+      <button id="help-done" class="primary">Back to the vault</button>
+    </dialog>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
